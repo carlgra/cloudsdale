@@ -55,4 +55,26 @@ e.g.
 ```
     server: https://twilight:6443
 ```
+check k3s is running on all nodes from master node (twilight)
+
+```
+kubectl config use-context k3s-ansible
+kubectl get nodes
+```
+
+
+## K9s running locally
+
+install kubernetes cli locally and copy config to localhost from control node
+
+```
+brew install kubernetes-cli
+scp -r ubuntu@twilight:/home/ubuntu/.kube .
+cp -r .kube $HOME/
+```
+edit config file for master node name in server
+
+run k9s to check connectivity
+
+
 
