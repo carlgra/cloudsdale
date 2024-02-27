@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kafka 
-  namespace: astra-infra
+  namespace: astra
 spec:
   project: default
   source:
