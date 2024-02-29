@@ -1,4 +1,5 @@
-# cloudsdale
+
+ cloudsdale
 
 fresh install of ubuntu on 4 nodes - twilight, celestia, luna, crankydoodle
 
@@ -79,6 +80,10 @@ run k9s to check connectivity
 
 # Installing ArgoCD 
 e.g.  https://medium.com/be-tech-with-santander/from-git-to-kubernetes-in-10-minutes-with-argocd-3027a2d5ea62
+to uninstall...
+```
+kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
 
 create argocd namespace from local
 ```
@@ -159,8 +164,19 @@ spec:
   source:
     repoURL: $HTTPS_REPO_URL
     path: .
-    targetRevision: master
+    targetRevision: main
 EOF
 ```
 
+looking at Ingress to open up argo cd ui
 
+It turns out that Traefik has a dashboard. Here’s how to access it via kubectl port-forward.
+
+check ingress
+```
+kubectl get ingress -A
+```
+kubectl --namespace kube-system port-forward deployments/traefik 9000:9000 &
+Then navigate to http://localhost:9000/dashboard/.
+
+If you want to make this more permanent by using an Ingress, see https://k3s.rocks/traefik-dashboard/.
