@@ -52,6 +52,10 @@ ansible-playbook playbook/site.yml -i inventory.yml
 
 the ~/.kube/config file from the control node host is copied to your local ~/.kube/config may need to edit this if you did not set up etc/hosts on the control node.
 
+if it doesnt bring it back can scp i
+````
+scp -r ubuntu@twilight:/home/ubuntu/.kube .
+```
 e.g. 
 ```
     server: https://twilight:6443
@@ -180,3 +184,66 @@ kubectl --namespace kube-system port-forward deployments/traefik 9000:9000 &
 Then navigate to http://localhost:9000/dashboard/.
 
 If you want to make this more permanent by using an Ingress, see https://k3s.rocks/traefik-dashboard/.
+
+READ THIS NEXT
+https://doc.traefik.io/traefik/providers/kubernetes-crd/
+
+
+installing metallb from turingpi docs
+
+ helm repo add metallb https://metallb.github.io/metallb
+helm upgrade --install metallb metallb/metallb --create-namespace \
+--namespace metallb-system --wait
+
+
+
+cat << 'EOF' | kubectl apply -f -
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 10.0.0.70-10.0.0.80
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - default-pool
+EOF
+
+- DIDNT FINISH THIS
+
+
+tried this
+https://doc.traefik.io/traefik/getting-started/quick-start-with-kubernetes/
+
+files in code/traefik
+ this seems to work for the whoami service at least
+
+iused the tailscale IP address from login report on twilight
+http://100.91.183.30:8080/dashboard/#/
+
+works to get to traefik dashboard :)
+
+
+# HELM DASHBOARD
+https://github.com/komodorio/helm-dashboard
+
+on localhost
+
+```
+helm plugin install https://github.com/komodorio/helm-dashboard.git
+helm plugin update dashboard
+helm dashboard
+```
+-- to uninstall
+helm plugin uninstall dashboard
+
+
+l
